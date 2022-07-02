@@ -5,11 +5,11 @@ FI = (5 ** 0.5 - 1) / 2
 
 def calculate(a, d1, b, d2):
     if d1[0] == d2[0]:
-        delta = dt.timedelta(abs((d2 - d1).days))
+        delta = dt.timedelta(abs((d2[1] - d1[1]).days))
     elif a != 2:
-        delta = dt.timedelta(abs((dt.date(9800, 1, 1) - d1[1]).days) + abs((d2[1] - dt.date(1, 1, 1).days)))
+        delta = dt.timedelta(abs((dt.date(9800, 1, 1) - d1[1]).days) + abs((d2[1] - dt.date(1, 1, 1)).days))
     else:
-        delta = dt.timedelta(abs((dt.date(9800, 1, 1) - d2[1]).days) + abs((d1[1] - dt.date(1, 1, 1).days)))
+        delta = dt.timedelta(abs((dt.date(9800, 1, 1) - d2[1]).days) + abs((d1[1] - dt.date(1, 1, 1)).days))
     sp = [0, 0, 0, 0]
     sp[a - 1] = d1
     sp[b - 1] = d2
@@ -57,12 +57,12 @@ def age(d1, d2):
         m = (d2[1].year - d1[1].year) * 12 + (d2[1].month - d1[1].month)
     else:
         m = (d2[1].year - 1 + 9800 - d1[1].year) * 12 + (d2[1].month - d1[1].month)
-    d = d2.day - d1.day
-    if d < 0 and d1.month == 12:
+    d = d2[1].day - d1[1].day
+    if d < 0 and d1[1].month == 12:
         d += 31
         m -= 1
     elif d < 0:
-        d += (dt.date(d1.year, d1.month + 1, 1) - dt.date(d1.year, d1.month, 1)).days
+        d += (dt.date(d1[1].year, d1[1].month + 1, 1) - dt.date(d1[1].year, d1[1].month, 1)).days
         m -=1
     y = m // 12
     m = m % 12
@@ -95,8 +95,18 @@ def sum_date(date, delta, zn):
         else:
             res = [date[0], date[1] + delta]
     else:
-        if date[0] == 0 and (date[1] - dt.date(1, 1, 1)).days < dalta.days:
+        if date[0] == 0 and (date[1] - dt.date(1, 1, 1)).days < delta.days:
             res = [-1, dt.date(9800, 1, 1) - (delta - (date[1] - dt.date(1, 1, 1)))]
         else:
             res = [date[0], date[1] - delta]
     return res
+
+
+def date_title(n):
+    if n == 1:
+        return 'Исходная'
+    if n == 2:
+        return 'Конечная'
+    if n == 3:
+        return 'Золотое сечение 1'
+    return 'Золотое сечение 2'
